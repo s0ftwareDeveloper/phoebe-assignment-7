@@ -44,6 +44,11 @@ class CustomArrayListTest<T> {
         Integer originalSize = sut.getSize();
 
         sut.add(index, value);
+        System.out.println("************************");
+
+        for (int i = 0; i < sut.getSize(); i++) {
+            System.out.println(sut.get(i));
+        }
 
         for (int i = 0; i < sut.getSize(); i++) {
 
@@ -60,10 +65,18 @@ class CustomArrayListTest<T> {
     }
 
     /**
-     * adds 10 to an empty list
-     * checks if first index is 10
-     * checks if size is one
+     * checks if array correctly removes item at given index
+     *
+     * @param index position of item to remove
      */
+    void checkArrayRemove(Integer index) {
+        Integer originalSize = sut.getSize();
+        assertEquals(sut.get(index), index);
+        sut.remove(index);
+        assertEquals(sut.get(index), index + 1);
+        assertEquals(sut.getSize(), originalSize - 1);
+    }
+
     @Test
     void should_add_one_number_to_list() {
 
@@ -73,11 +86,6 @@ class CustomArrayListTest<T> {
         assertEquals(1, sut.getSize());
     }
 
-    /**
-     * adds a string to an empty list
-     * checks if first index is "hello"
-     * checks if size is one
-     */
     @Test
     void should_add_one_string_to_list() {
 
@@ -87,11 +95,6 @@ class CustomArrayListTest<T> {
         assertEquals(1, sut.getSize());
     }
 
-    /**
-     * adds 11 items to the list
-     * checks if this size is 11 in the populate method
-     * checks if each element is correct
-     */
     @Test
     void should_add_11_items_to_list() {
 
@@ -102,13 +105,6 @@ class CustomArrayListTest<T> {
         }
     }
 
-
-    /**
-     * adds '19' to a list that has less than 10 elements at index 5
-     * checks that the elements before the index are the same
-     * checks that the element at the index is '19'
-     * checks that the elements after the index are the original elements shifted to the right by one
-     */
     @Test
     void should_add_item_to_middle_with_under_10_elements() {
 
@@ -121,8 +117,11 @@ class CustomArrayListTest<T> {
     @Nested
     class PrePopulatedTests {
 
+        /**
+         * Initializes each test with 15 elements in sut
+         */
         @BeforeEach
-        public void init(){
+        public void init() {
             populate(15);
         }
 
@@ -135,24 +134,27 @@ class CustomArrayListTest<T> {
         @Test
         void should_add_item_to_beginning_of_list() {
 
+
+            for (int i = 0; i < sut.getSize(); i++) {
+                System.out.println(sut.get(i));
+            }
             checkArrayAdd(0, (T) (Integer) 22);
+
         }
 
         @Test
         void should_add_item_to_end_of_list() {
 
-            Integer sutSize = sut.getSize();
-
-            checkArrayAdd(sutSize, (T) (Integer) 22);
+            checkArrayAdd(sut.getSize(), (T) (Integer) 22);
         }
 
         @Test
         void should_add_multiple_indexed_items_to_list() {
 
             Integer originalSize = sut.getSize();
-            
-            sut.add(7, (T)(Integer)22);
-            sut.add(11, (T)(Integer)99);
+
+            sut.add(7, (T) (Integer) 22);
+            sut.add(11, (T) (Integer) 99);
 
             assertEquals(sut.get(7), 22);
             assertEquals(sut.get(11), 99);
@@ -162,42 +164,23 @@ class CustomArrayListTest<T> {
         @Test
         void should_remove_item_from_beginning_of_list() {
 
-            Integer originalSize = sut.getSize();
-
-            assertEquals(sut.get(0), 0);
-
-            sut.remove(0);
-
-            assertEquals(sut.get(0), 1);
-
-            assertEquals(sut.getSize(), originalSize - 1);
+            checkArrayRemove(0);
 
         }
 
         @Test
         void should_remove_item_from_middle_of_list() {
 
-            Integer originalSize = sut.getSize();
-
-            assertEquals(sut.get(6), 6);
-
-            sut.remove(6);
-
-            assertEquals(sut.get(6), 7);
-
-            assertEquals(sut.getSize(), originalSize - 1);
+            checkArrayRemove(6);
         }
 
         @Test
         void should_remove_item_from_end_of_list() {
 
             Integer originalSize = sut.getSize();
-
             assertEquals(sut.get(originalSize - 1), originalSize - 1);
-
-            sut.remove(originalSize);
-
-            assertEquals(originalSize - 1, sut.getSize());
+            sut.remove(originalSize - 1);
+            assertEquals(sut.getSize(), originalSize - 1);
 
         }
 

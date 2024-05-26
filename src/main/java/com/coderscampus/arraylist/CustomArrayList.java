@@ -2,10 +2,11 @@ package com.coderscampus.arraylist;
 
 import java.util.Arrays;
 
+@SuppressWarnings("unchecked")
 public class CustomArrayList<T> implements CustomList<T> {
 
     Object[] items = new Object[10];
-    private Integer numElements = 0;
+    private Integer size = 0;
 
     @Override
     public boolean add(T item) {
@@ -14,8 +15,8 @@ public class CustomArrayList<T> implements CustomList<T> {
         items = correctSizeArray().clone();
 
         // add item to array
-        items[numElements] = item;
-        numElements++;
+        items[size] = item;
+        size++;
         return true;
     }
 
@@ -24,7 +25,7 @@ public class CustomArrayList<T> implements CustomList<T> {
 
         Object[] newArray = correctSizeArray().clone();
         newArray[index] = item;
-        numElements++;
+        size++;
         System.arraycopy(items, index, newArray, (index + 1), getSize() - index);
         items = newArray.clone();
         return true;
@@ -32,7 +33,7 @@ public class CustomArrayList<T> implements CustomList<T> {
 
     @Override
     public int getSize() {
-        return numElements;
+        return size;
     }
 
     @Override
@@ -42,18 +43,18 @@ public class CustomArrayList<T> implements CustomList<T> {
 
     @Override
     public T remove(int index) throws IndexOutOfBoundsException {
-        //todo: shift items to the left of index
+
         Object[] newArray = Arrays.copyOf(items, items.length);
         Object removed = items[index];
-        System.arraycopy(items,  (index + 1), newArray, index, newArray.length - index - 1);
+        System.arraycopy(items, (index + 1), newArray, index, newArray.length - index - 1);
         items = newArray.clone();
-        numElements--;
+        size--;
 
-        return (T)removed;
+        return (T) removed;
     }
 
     public Object[] correctSizeArray() {
-        if (numElements >= items.length - 1) {
+        if (size >= items.length - 1) {
             return Arrays.copyOf(items, items.length * 2);
         }
 
