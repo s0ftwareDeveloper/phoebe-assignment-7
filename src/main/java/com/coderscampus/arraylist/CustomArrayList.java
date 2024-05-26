@@ -10,14 +10,23 @@ public class CustomArrayList<T> implements CustomList<T> {
     @Override
     public boolean add(T item) {
 
-        // array size needs to be expanded to add item
-        if (numElements >= items.length - 1) {
-            Object[] newArray = Arrays.copyOf(items, items.length * 2);
-            items = newArray.clone();
-        }
+        //resizes array if necessary
+        items = correctSizeArray().clone();
+
         // add item to array
         items[numElements] = item;
         numElements++;
+        return true;
+    }
+
+    @Override
+    public boolean add(int index, T item) throws IndexOutOfBoundsException {
+
+        Object[] newArray = correctSizeArray().clone();
+        newArray[index] = item;
+        numElements++;
+        System.arraycopy(items, index, newArray, (index + 1), getSize() - index);
+        items = newArray.clone();
         return true;
     }
 
@@ -28,8 +37,27 @@ public class CustomArrayList<T> implements CustomList<T> {
 
     @Override
     public T get(int index) {
-        Object obj = items[index];
-        return (T) obj;
+        return (T) items[index];
+    }
+
+    @Override
+    public T remove(int index) throws IndexOutOfBoundsException {
+        //todo: shift items to the left of index
+        Object[] newArray = Arrays.copyOf(items, items.length);
+        Object removed = items[index];
+        System.arraycopy(items,  (index + 1), newArray, index, newArray.length - index - 1);
+        items = newArray.clone();
+        numElements--;
+
+        return (T)removed;
+    }
+
+    public Object[] correctSizeArray() {
+        if (numElements >= items.length - 1) {
+            return Arrays.copyOf(items, items.length * 2);
+        }
+
+        return items;
     }
 
 }
