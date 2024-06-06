@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SuppressWarnings("unchecked")
 class CustomArrayListTest<T> {
 
-    CustomList<T> sut;
+    CustomArrayList<T> sut;
 
     /**
      * Initializes new CustomArrayList before each test
@@ -30,6 +30,7 @@ class CustomArrayListTest<T> {
         }
 
         assertEquals(amount, sut.getSize());
+
     }
 
     /**
@@ -97,15 +98,38 @@ class CustomArrayListTest<T> {
         for (int i = 0; i < 11; i++) {
             assertEquals(i, sut.get(i));
         }
+
+        assertEquals(20, sut.getBackingArrayLength());
+    }
+
+    @Test
+    void should_add_10_items_to_list() {
+
+        populate(10);
+
+        for (int i = 0; i < 10; i++) {
+            assertEquals(i, sut.get(i));
+        }
+
+        assertEquals(10, sut.getBackingArrayLength());
     }
 
     @Test
     void should_add_item_to_middle_with_under_10_elements() {
 
         populate(9);
+        System.out.println("size: " + sut.getSize() + "\nlength: " + sut.getBackingArrayLength());
 
         checkArrayAdd(5, (T) (Integer) 19);
 
+    }
+
+    @Test
+    void should_throw_exception_adding_item_at_out_of_bounds_index() {
+
+        populate(10);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> sut.add(11, (T)(Integer)10));
     }
 
     @Test

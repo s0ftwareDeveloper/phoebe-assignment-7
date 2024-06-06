@@ -5,17 +5,17 @@ import java.util.Arrays;
 @SuppressWarnings("unchecked")
 public class CustomArrayList<T> implements CustomList<T> {
 
-    Object[] items = new Object[10];
+    Object[] backingArray = new Object[10];
     private Integer size = 0;
 
     @Override
     public boolean add(T item) {
 
         //resizes array if necessary
-        items = correctSizeArray().clone();
+        backingArray = correctSizeArray().clone();
 
         // add item to array
-        items[size] = item;
+        backingArray[size] = item;
         size++;
         return true;
     }
@@ -25,9 +25,10 @@ public class CustomArrayList<T> implements CustomList<T> {
 
         Object[] newArray = correctSizeArray().clone();
         newArray[index] = item;
+        System.arraycopy(backingArray, index, newArray, (index + 1), getSize() - index);
+
+        backingArray = newArray.clone();
         size++;
-        System.arraycopy(items, index, newArray, (index + 1), getSize() - index);
-        items = newArray.clone();
         return true;
     }
 
@@ -38,27 +39,35 @@ public class CustomArrayList<T> implements CustomList<T> {
 
     @Override
     public T get(int index) {
-        return (T) items[index];
+        return (T) backingArray[index];
     }
 
     @Override
     public T remove(int index) throws IndexOutOfBoundsException {
 
-        Object[] newArray = Arrays.copyOf(items, items.length);
-        Object removed = items[index];
-        System.arraycopy(items, (index + 1), newArray, index, newArray.length - index - 1);
-        items = newArray.clone();
+        Object[] newArray = Arrays.copyOf(backingArray, backingArray.length);
+        Object removed = backingArray[index];
+        System.arraycopy(backingArray, (index + 1), newArray, index, newArray.length - index - 1);
+        backingArray = newArray.clone();
         size--;
 
         return (T) removed;
     }
 
     public Object[] correctSizeArray() {
-        if (size >= items.length - 1) {
-            return Arrays.copyOf(items, items.length * 2);
+        System.out.println("here 1");
+        System.out.println("size: " + size + "items length: " + backingArray.length);
+        if (size >= backingArray.length) {
+            System.out.println("here 2");
+            return Arrays.copyOf(backingArray, backingArray.length * 2);
         }
 
-        return items;
+        return backingArray;
+    }
+
+    public int getBackingArrayLength()
+    {
+        return backingArray.length;
     }
 
 }
