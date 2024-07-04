@@ -118,7 +118,6 @@ class CustomArrayListTest<T> {
     void should_add_item_to_middle_with_under_10_elements() {
 
         populate(9);
-        System.out.println("size: " + sut.getSize() + "\nlength: " + sut.getBackingArrayLength());
 
         checkArrayAdd(5, (T) (Integer) 19);
 
@@ -205,6 +204,7 @@ class CustomArrayListTest<T> {
 
         @Test
         void should_remove_multiple_items_from_list() {
+
             Integer originalSize = sut.getSize();
             sut.remove(7);
             sut.remove(8);
