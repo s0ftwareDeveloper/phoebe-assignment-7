@@ -73,6 +73,17 @@ class CustomArrayListTest<T> {
     }
 
     @Test
+    void should_remove_from_list_end()
+    {
+        for (Integer i = 0; i < 10; i++)
+        {
+            sut.add((T)i);
+        }
+        sut.remove(9);
+        assertNull(sut.get(9));
+    }
+
+    @Test
     void should_add_one_number_to_list() {
 
         sut.add((T) (Integer) 10);

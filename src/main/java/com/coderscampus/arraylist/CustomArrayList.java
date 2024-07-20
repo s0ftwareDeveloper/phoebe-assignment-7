@@ -45,11 +45,18 @@ public class CustomArrayList<T> implements CustomList<T> {
     @Override
     public T remove(int index) throws IndexOutOfBoundsException {
 
-        Object[] newArray = backingArray.clone();
         Object removed = backingArray[index];
-        System.arraycopy(backingArray, (index + 1), newArray, index, newArray.length - index - 1);
+
+        // removing last element
+        if (index + 1 == size) {
+            backingArray[index] = null;
+        } else {
+            Object[] newArray = backingArray.clone();
+            System.arraycopy(backingArray, (index + 1), newArray, index, newArray.length - index - 1);
+            backingArray = newArray.clone();
+        }
+
         size--;
-        backingArray = Arrays.copyOf(newArray, size);
 
         return (T) removed;
     }
@@ -62,9 +69,17 @@ public class CustomArrayList<T> implements CustomList<T> {
         return backingArray;
     }
 
-    public int getBackingArrayLength()
-    {
+    public int getBackingArrayLength() {
         return backingArray.length;
     }
+
+    /*private void printBackingArray() {
+        for (Object elem : backingArray) {
+            System.out.print(elem + ", ");
+
+        }
+        System.out.println();
+        System.out.println();
+    }*/
 
 }
